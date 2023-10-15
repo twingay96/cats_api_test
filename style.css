@@ -1,0 +1,40 @@
+.head-line{
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+
+}
+.head-line img{
+    width: 350px;
+    height: 90px;
+}
+
+.menus{
+    margin-top: 1em;
+    display: flex;
+    /* flex 관련 속성 크기변경되면 자동으로 줄바꿈 */
+    flex-wrap: wrap; 
+    justify-content: center;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 4px double black;
+}
+.menus button{
+    border: none;
+    background: none;
+    margin: 5px;
+}
+.menus button:hover{
+    background-color: beige;
+}
+/* div img{
+    width: 350px;
+    height:200px;
+} */
+.news-img-size{
+    /* 최대 크기는 부모요소의 100% */
+    max-width: 100; 
+    max-height: 250px;
+}
+.news{
+    border-bottom: 2px solid black;
+}
