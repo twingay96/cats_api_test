@@ -3,9 +3,31 @@ let menus = document.querySelectorAll(".menus button");
 console.log(menus)
 // 클릭한게 어떤 Topic인지 알려주는 용도로 event 넘겨줌 
 menus.forEach((menu) =>menu.addEventListener("click",(event)=> getNewsByTopic(event)));
+let searchButton = document.getElementById("search_button");
+
+
+const getNews = async()=> {
+    //1. 검색 키워드 읽어오기
+    //2. url에 검색키워드 붙이기
+    //3. 헤더 준비
+    //4. url부르기
+    //5. data가져오기
+    //6. data보여주기
+    let keyword = document.getElementById("search_input").value
+    console.log("키워드:",keyword);
+    let url = new URL(`https://newsapi.org/v2/top-headlines?country=us&apiKey=d213fbb4de7648fa9d67242f87b3e3ca&int=10&q=${keyword}`);
+    let header = new Headers({'x-api-key': 'd213fbb4de7648fa9d67242f87b3e3ca'});
+    let response = await fetch(url,{ headers: header})
+    let data = await response.json();
+    news = data.articles;
+    render()
+}
+// 함수를 const 변수 처럼사용할 경우 호이스팅 개념때문에 항상 먼저 함수(getNews)를 정의한 후에 getNews를 사용해야한다.
+searchButton.addEventListener("click",getNews);
+
 
 const getLatestNews = async() =>{
-    let url = new URL('https://newsapi.org/v2/top-headlines?country=kr&category=business&apiKey=d213fbb4de7648fa9d67242f87b3e3ca&int=10'
+    let url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=d213fbb4de7648fa9d67242f87b3e3ca&int=10'
     // 자바스크립트에서 제공하는 URL클래스 
     );
     let header = new Headers({'x-api-key': 'd213fbb4de7648fa9d67242f87b3e3ca'});
@@ -25,7 +47,7 @@ const getNewsByTopic = async(event) =>{
     // .textContent : 해당 tag안의 텍스트 내용만을 가져옴
     console.log("클릭됨",event.target.textContent);
     let topic = event.target.textContent.toLowerCase(); // 소문자로 변환 ,api document에서 category는 소문자로 받아야한다 명시함
-    let url = new URL(`https://newsapi.org/v2/top-headlines?country=kr&category=${topic}&apiKey=d213fbb4de7648fa9d67242f87b3e3ca&int=10`);
+    let url = new URL(`https://newsapi.org/v2/top-headlines?country=us&category=${topic}&apiKey=d213fbb4de7648fa9d67242f87b3e3ca&int=10`);
     let header = new Headers({'x-api-key': 'd213fbb4de7648fa9d67242f87b3e3ca'});
     // 자바스크립트에서 제공하는 HEADERS클래스 
     // 서버요청은 스택자료구조에서 후순위이기 때문에 await을 해줘야함
@@ -65,3 +87,4 @@ const render =() =>{
     document.getElementById("news-board").innerHTML = newsHTML;
 }
 getLatestNews();
+
