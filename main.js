@@ -1,5 +1,7 @@
 let news = [];
 let menus = document.querySelectorAll(".menus button");
+let page = 1;
+let total_pages = 0;
 console.log(menus)
 // 클릭한게 어떤 Topic인지 알려주는 용도로 event 넘겨줌 
 menus.forEach((menu) =>menu.addEventListener("click",(event)=> getNewsByTopic(event)));
@@ -22,12 +24,15 @@ const getApi = async() =>{
         let data = await response.json(); // 서버통신에서 사용하는  데이터 타입
         if(response.status == 200){
             console.log("받은데이터는:", data);
-            if(data.total_hits == 0 ){
+            if(data.articles.length == 0 ){
                 throw new Error("검색된 결과값이 없습니다.");
             }
             news = data.articles;
+            total_pages = data.totalResults
+            // page = data.page; 내가 쓰는 api의 data에는 page가 없는상황임
             console.log("news:",news);
             render();
+            pageNation();
         }else{
             throw new Error(data.message);
         }
@@ -48,7 +53,7 @@ const getNews = async()=> {
     //5. data가져오기
     //6. data보여주기
     let keyword = document.getElementById("search_input").value
-    let url = new URL(`https://newsapi.org/v2/top-headlines?country=us&int=10&q=${keyword}`);
+    url = new URL(`https://newsapi.org/v2/top-headlines?country=us&int=10&q=${keyword}`);
     console.log("키워드:",keyword);
     getApi();
     
@@ -100,6 +105,22 @@ const render =() =>{
     // newsHTML = news.map((news)=> {return ..})을하게되면 배열속 ','까지 함께 전달되어서 화면에찍힘 없애기위해 .join('')
     // console.log(newsHTML);
     document.getElementById("news-board").innerHTML = newsHTML;
+}
+const pageNation = () =>{
+    let pageNationHTML = ``
+    // total page수 를 알아야함
+    // 현재 몇 page인지 
+    // page 그룹을 찾아야함
+    // last. first가 뭔지 알아야함
+    // first~ last까지 page 프린트 
+    let pageGroup = Math.ceil(page/5)
+    let last = pageGroup*5
+    let first = last-4
+    for(let i=first;i<=last;i++){
+        pageNationHTML = `<li class="page-item"><a class="page-link" href="#">${i}</a></li>`
+    }
+    document.querySelector(".pagination").innerHTML = pageNationHTML;
+
 }
 getLatestNews();
 
